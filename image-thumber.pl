@@ -53,6 +53,8 @@ foreach my $image_file (sort @image_files) {
     my $base       = basename($image_file);
     my $category   = basename($dir);
     my $thumb_file = "$dir/thumb-$base";
+    
+    die "$image_file is too big\n" if -s $image_file > 500 * 1024;
 
     next if $base =~ /^thumb/;
 
@@ -71,7 +73,6 @@ foreach my $image_file (sort @image_files) {
             }
         }
     }
-    
     
     $thumb->write( file => $thumb_file ) or
       die $thumb->errstr;
@@ -93,6 +94,6 @@ $template->process(
     "thumb-index.tt2", \%tt_vars, "thumb-index.html"
 );
 
-system("zip", "-r", "images.zip", "images");
+system("zip", "-q", "-r", "images.zip", "images");
 
 

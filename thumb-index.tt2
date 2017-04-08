@@ -1,172 +1,173 @@
-<!DOCTYPE html>
-<!-- HTML5 Hello world by kirupa - http://www.kirupa.com/html5/getting_your_feet_wet_html5_pg1.htm -->
-<html lang="en-us">
+ <script src="https://code.jquery.com/jquery-3.2.1.min.js"
+         integrity="sha256-hwg4gsxgFZhOsEEamdOYGBf13FyQuiTwlAQgxVSNgt4="
+         crossorigin="anonymous"></script>
+ 
+ <style>
+ .lightbox img {
+	margin-right: 4px;
+	vertical-align: sub;
+}
 
-<head>
-	<meta charset="utf-8">
-	<title>Hello...</title>
-	<script src="https://code.jquery.com/jquery-3.2.1.min.js" integrity="sha256-hwg4gsxgFZhOsEEamdOYGBf13FyQuiTwlAQgxVSNgt4=" crossorigin="anonymous"></script>
-</head>
+#lb_img {
+	background-color: #fff;
+	border: 1px solid #666;
+	-webkit-box-shadow: 0 0 10px #555;
+	-moz-box-shadow: 0 0 10px #555;
+	box-shadow: 0 0 10px #555;
+	padding: 10px;
+	max-width: 90%;
+	margin: 20px auto;
+	cursor: pointer;
+}
 
-<body>
+#lb_overlay {
+	position: fixed;
+	background: none repeat scroll 0 0 rgba(0, 0, 0, 0.5);
+	width: 100%;
+	height: 100%;
+	top: 0px;
+	left: 0px;
+	text-align: center;
+	z-index: 2;
+}
 
-	<style>
-		.lightbox img {
-			margin-right: 4px;
-			vertical-align: sub;
-		}
-		
-		#lb_img {
-			background-color: #fff;
-			border: 1px solid #666;
-			-webkit-box-shadow: 0 0 10px #555;
-			-moz-box-shadow: 0 0 10px #555;
-			box-shadow: 0 0 10px #555;
-			padding: 10px;
-			max-width: 90%;
-			margin: 20px auto;
-			cursor: pointer;
-		}
-		
-		#lb_overlay {
-			position: fixed;
-			background: none repeat scroll 0 0 rgba(0, 0, 0, 0.5);
-			width: 100%;
-			height: 100%;
-			top: 0px;
-			left: 0px;
-			text-align: center;
-			z-index: 2;
-		}
-		
-		#lb_overlay2 {
-			position: absolute;
-			left: 0px;
-			width: 100%;
-			text-align: center;
-			z-index: 2;
-		}
-		
-		.lb_text_bg {
-			background-color: black;
-			padding: 4px;
-		}
-		
-		#lb_text {
-			color: #fff;
-			font-weight: bold;
-			text-shadow: 1px 1px 1px #000;
-			position: relative;
-			bottom: 80px;
-			z-index: 3;
-			cursor: default;
-		}
-		
-		#lb_close_btn {
-			position: fixed;
-			top: 8px;
-			right: 8px;
-		}
-		
-		.spoony-category {
-			padding-bottom: 10px;
-		}
-		
-		.spoony-label {
-			font-size: larger;
-		}
-		
-		.spoony-images {
-			display: flex;
-			align-items: center;
-			flex-wrap: wrap;
-		}
-		
-		img {
-			box-shadow: 8px 8px 10px #aaa;
-		}
-	</style>
-	<script>
-		function lb_show(el) {
-			jQuery(window).trigger('close');
-			jQuery(document).bind('keyup.lb', function(event) {
-				if (event.keyCode == 27) {
-					lb_close(event);
-				}
-			});
-			var overlay = jQuery('<div>')
-				.prop('id', 'lb_overlay')
-				.css({
-					opacity: 0
-				})
-				.appendTo('body');
-			var overlay2 = jQuery('<div>')
-				.prop('id', 'lb_overlay2')
-				.css({
-					top: jQuery(window).scrollTop() + 5
-				})
-				.appendTo('body');
+#lb_overlay2 {
+	position: absolute;
+	left: 0px;
+	width: 100%;
+	text-align: center;
+	z-index: 2;
+}
 
-			var img = jQuery('<img>')
-				.prop('id', 'lb_img')
-				.prop('src', el.href)
-				.prop('alt', 'Loading...')
-				.css({
-					opacity: 0
-				})
-				.appendTo(overlay2)
-				.click(function(event) {
-					event.stopPropagation();
-					window.location.href = el.href;
-				});
-			var close_btn = jQuery('<button>')
-				.prop('id', 'lb_close_btn')
-				.prop('type', 'button')
-				.addClass('minor')
-				.text('Close')
-				.appendTo(overlay2);
-			var title = jQuery('<div>')
-				.prop('id', 'lb_text')
-				.appendTo(overlay2);
-			var title_span = jQuery("<span class='lb_text_bg'>");
-			title_span.text(el.title);
-			title_span.appendTo(title);
-			overlay.add(overlay2).click(lb_close);
-			img.add(overlay).animate({
-				opacity: 1
-			}, 200);
-		}
+.lb_text_bg {
+	background-color: black;
+	padding: 4px;
+}
 
-		function lb_close(event) {
-			event.preventDefault();
-			jQuery(document).unbind('keyup.lb');
-			jQuery('#lb_overlay, #lb_overlay2, #lb_close_btn, #lb_img, #lb_text').remove();
-		}
-		jQuery(document).ready(function() {
-			jQuery('.lightbox')
-				.click(function(event) {
-					if (event.metaKey || event.ctrlKey || event.altKey || event.shiftKey)
-						return;
-					event.preventDefault();
-					lb_show(this);
-				});
+#lb_text {
+	color: #fff;
+	font-weight: bold;
+	text-shadow: 1px 1px 1px #000;
+	position: relative;
+	bottom: 80px;
+	z-index: 3;
+	cursor: default;
+}
 
-		})
-	</script>
-	[% FOREACH category IN images_by_category.keys.sort %]
-	<div class="spoony-category">
-		[% label = category_label_map.$category OR category %]
+#lb_close_btn {
+	position: fixed;
+	top: 8px;
+	right: 8px;
+}
+
+.spoony-category {
+	padding-bottom: 10px;
+}
+
+.spoony-label {
+	font-size: larger;
+	font-weight: bold;
+	color: #4F4F4F;
+	margin-bottom: 4px
+}
+
+.spoony-image {
+	min-height: 125px;
+	margin-left: 4px;
+	margin-right: 4px;
+}
+
+.spoony-images {
+	display: flex;
+	align-items: baseline;
+	flex-wrap: wrap;
+	border-bottom-style: inset;
+	border-bottom-width: 2px;
+	border-bottom-color: yellowgreen;
+	padding-bottom: 10px;
+	margin-bottom: 20px;
+}
+
+img {
+	box-shadow: 8px 8px 10px #aaa;
+}
+.greenhr {
+	border-color:yellowgreen;
+}
+
+</style><script>function lb_show(el) {
+	jQuery(window).trigger('close');
+	jQuery(document).bind('keyup.lb', function(event) {
+		if (event.keyCode==27) {
+			lb_close(event);
+		}
+	}
+	);
+	var overlay=jQuery('<div>') .prop('id', 'lb_overlay') .css( {
+		opacity: 0
+	}
+	) .appendTo('body');
+	var overlay2=jQuery('<div>') .prop('id', 'lb_overlay2') .css( {
+		top: jQuery(window).scrollTop() + 5
+	}
+	) .appendTo('body');
+	var img=jQuery('<img>') .prop('id', 'lb_img') .prop('src', el.href) .prop('alt', 'Loading...') .css( {
+		opacity: 0
+	}
+	) .appendTo(overlay2) .click(function(event) {
+		event.stopPropagation();
+		window.location.href=el.href;
+	}
+	);
+	var close_btn=jQuery('<button>') .prop('id', 'lb_close_btn') .prop('type', 'button') .addClass('minor') .text('Close') .appendTo(overlay2);
+	var title=jQuery('<div>') .prop('id', 'lb_text') .appendTo(overlay2);
+	var title_span=jQuery("<span class='lb_text_bg'>");
+	title_span.text(el.title);
+	title_span.appendTo(title);
+	overlay.add(overlay2).click(lb_close);
+	img.add(overlay).animate( {
+		opacity: 1
+	}
+	, 200);
+}
+
+function lb_close(event) {
+	event.preventDefault();
+	jQuery(document).unbind('keyup.lb');
+	jQuery('#lb_overlay, #lb_overlay2, #lb_close_btn, #lb_img, #lb_text').remove();
+}
+
+jQuery(document).ready(function() {
+	jQuery('.lightbox') .click(function(event) {
+		if (event.metaKey || event.ctrlKey || event.altKey || event.shiftKey) return;
+		event.preventDefault();
+		lb_show(this);
+	}
+	);
+}
+
+)
+
+</script>
+
+[% INCLUDE "spoony-header.tt2" %]
+
+[% FOREACH category IN images_by_category.keys.sort %]
+	<div class="spoony-category">[% label=category_label_map.$category OR category %]
 		<div class="spoony-label">[% label %]</div>
 		<div class="spoony-images">
 			[% FOREACH image IN images_by_category.$category %]
-			<div class="spoony-image">
-				<a title="[% image.label %]" class="lightbox" href="[% image.original_url %]">
-					<img alt="[% image.label %]" title="[% image.label %]" class="spoony-round" src="[% image.thumb_url %]"></a>
-			</div>
+				<div class="spoony-image">
+					<a title="[% image.label %]" 
+					   class="lightbox" 
+					   href="[% image.original_url %]">
+						<img alt="[% image.label %]" 
+						     title="[% image.label %]"
+						     class="spoony-round"
+						     src="[% image.thumb_url %]">
+						     </a>
+				</div>
 			[% END %]
 		</div>
 	</div>
-	[% END %]
-</body>
-
-</html>
+[% END %]
